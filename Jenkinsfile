@@ -15,7 +15,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'gradle buildDockerImage'
+                    dockerImage = docker.build("HelloWorld")
                 }
             }
         }
