@@ -2,9 +2,8 @@ pipeline {
     agent { 
         dockerfile {
             filename 'abobaboba'
-            args '-v /root/.gradle:/root/.gradle'  
+            args '--privileged -v /root/.gradle:/root/.gradle'  
         } 
-        
     }
     stages {
         stage('Build with Gradle') {
