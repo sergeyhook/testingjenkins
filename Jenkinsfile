@@ -1,22 +1,27 @@
 pipeline {
-    agent { 
-        dockerfile {
-            filename 'abobaboba'  
-        } 
-    }
+    agent any
     stages {
         stage('Build with Gradle') {
+            agent{ 
+                dockerfile {
+                    filename 'gradlebuilder'  
+                } 
+            }
             steps {
-                sh 'ls -la ~/.gradle/native'
-                sh 'id'
                 sh 'gradle build'
             }
         }
 
         stage('Build Docker Image') {
+            agent{ 
+                dockerfile {
+                    filename 'dockerbuilder'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                } 
+            }
             steps {
                 script {
-                    sh 'gradle buildDockerImage'
+                    sh 'docker build -t HelloWorld .'
                 }
             }
         }

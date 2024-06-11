@@ -1,10 +1,6 @@
 FROM docker:dind
 
-RUN apk update
 
-RUN apk add --no-cache gradle
-RUN mkdir -p ~/.gradle/native
-RUN chmod -R 777 ~/.gradle/native
 WORKDIR /home/gradle/project
 
 COPY . .
