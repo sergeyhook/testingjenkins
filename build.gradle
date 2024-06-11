@@ -1,10 +1,22 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.sparkjava:spark-core:2.9.3'
+    testImplementation 'junit:junit:4.12'
 }
 
+task customJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'HelloWorld'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+build.dependsOn(customJar)
