@@ -1,15 +1,21 @@
 pipeline {
     agent { 
         dockerfile {
-            filename 'abobaboba'  
+            filename 'abobaboba'
+            args '-v /root/.gradle:/root/.gradle'  
         } 
         
     }
     stages {
-        stage('Test') {
+        stage('Build') {
             steps {
-                sh 'node --version'
-                sh 'svn --version'
+                sh './gradlew build'
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
             }
         }
     }

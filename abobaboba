@@ -1,3 +1,1 @@
-FROM node:20.11.1-alpine3.19
-
-RUN apk add -U subversion
+FROM gradle:7.0.2-jdk11
