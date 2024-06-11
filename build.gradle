@@ -21,6 +21,12 @@ task customJar(type: Jar) {
     with jar
 }
 
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task buildDockerImage(type: DockerBuildImage) {
+    inputDir = projectDir
+    images = ['HelloWorld']
+}
 
 
 build.dependsOn(customJar)

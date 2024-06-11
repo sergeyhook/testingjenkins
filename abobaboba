@@ -1,6 +1,10 @@
-FROM gradle:7.0.2-jdk11
+FROM docker:dind
 
 USER root
+
+RUN dockerd &
+RUN apt update
+RUN apt install -y gradle
 
 USER gradle
 
