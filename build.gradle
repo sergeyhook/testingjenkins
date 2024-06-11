@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    
 }
 
 repositories {
@@ -12,16 +11,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-task customJar(type: Jar) {
+jar {
     manifest {
-        attributes 'Main-Class': 'HelloWorld'
+        attributes(
+            'Main-Class': 'HelloWorld'
+        )
     }
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    with jar
 }
 
-
-
-
-build.dependsOn(customJar)
+build.dependsOn(jar)
