@@ -2,25 +2,22 @@ plugins {
     id 'java'
 }
 
+group 'com.example'
+version '1.0-SNAPSHOT'
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'com.sparkjava:spark-core:2.9.3'
-    testImplementation 'junit:junit:4.12'
+    compile 'com.sparkjava:spark-core:2.9.3'
 }
 
 jar {
     manifest {
-        attributes(
-            'Main-Class': 'HelloWorld'
-        )
+        attributes 'Main-Class': 'com.example.HelloWorld'
     }
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
-build.dependsOn(jar)
