@@ -11,4 +11,3 @@ WORKDIR /home/gradle/project
 
 COPY . .
 
-USER gradle
