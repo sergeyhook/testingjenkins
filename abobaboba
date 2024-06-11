@@ -1,1 +1,5 @@
 FROM gradle:7.0.2-jdk11
+
+WORKDIR /home/gradle/project
+
+COPY . .
