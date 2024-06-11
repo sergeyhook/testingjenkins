@@ -1,6 +1,6 @@
 FROM docker:dind
 
-USER root
+USER gradle
 
 RUN apk update
 
