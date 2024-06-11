@@ -9,6 +9,7 @@ pipeline {
             }
             steps {
                 sh 'gradle build'
+                sh 'cp build/libs/*.jar .'
             }
         }
 
@@ -22,6 +23,7 @@ pipeline {
             }*/
             steps {
                 sh "docker build -t helloworldq:${env.BUILD_ID} ."
+                
             }
         }
 

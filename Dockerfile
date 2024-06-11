@@ -2,7 +2,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-COPY /home/gradle/project/build/libs/*.jar ./app.jar
+COPY *.jar ./app.jar
 
 EXPOSE 4567
 
