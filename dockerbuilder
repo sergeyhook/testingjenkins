@@ -1,4 +1,3 @@
 FROM docker:dind
 USER root
-RUN mkdir -p /.docker
-USER jenkins
+
