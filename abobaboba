@@ -5,6 +5,8 @@ USER root
 RUN dockerd &
 RUN apk update
 RUN apk add --no-cache gradle
+RUN apk add --no-cache libc6-compat
+
 
 USER gradle
 
