@@ -1,3 +1,5 @@
 FROM docker:dind
 USER root
-
+RUN mkdir -p /.docker
+RUN mkdir -p /.docker/buildx
+USER jenkins
