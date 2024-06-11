@@ -21,15 +21,15 @@ pipeline {
                 } 
             }*/
             steps {
-                sh "docker build -t HelloWorld:${env.BUILD_ID} ."
+                sh "docker build -t helloworldq:${env.BUILD_ID} ."
             }
         }
 
         stage('Archive') {
             steps {
                 archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
-                sh "docker save HelloWorld:${env.BUILD_ID} > HelloWorld.tar"
-                archiveArtifacts artifacts: 'HelloWorld.tar', fingerprint: true
+                sh "docker save helloworldq:${env.BUILD_ID} > helloworld.tar"
+                archiveArtifacts artifacts: 'helloworld.tar', fingerprint: true
             }
         }
     }
