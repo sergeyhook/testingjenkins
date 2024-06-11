@@ -1,13 +1,14 @@
 FROM docker:dind
 
-USER gradle
+USER root
 
-RUN dockerd &
 RUN apk update
-RUN apk add --no-cache gradle
-RUN apk add --no-cache libc6-compat
 
+RUN apk add --no-cache openjdk8
+RUN apk add --no-cache gradle
 
 WORKDIR /home/gradle/project
 
 COPY . .
+
+USER gradle

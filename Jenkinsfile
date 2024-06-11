@@ -1,8 +1,7 @@
 pipeline {
     agent { 
         dockerfile {
-            filename 'abobaboba'
-            args '-v /root/.gradle:/root/.gradle'  
+            filename 'abobaboba'  
         } 
     }
     stages {
