@@ -16,12 +16,12 @@ pipeline {
             agent{ 
                 dockerfile {
                     filename 'dockerbuilder'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
                 } 
             }
             steps {
                 script {
-                    sh 'sudo docker build -t HelloWorld .'
+                    sh 'docker build -t HelloWorld .'
                 }
             }
         }
