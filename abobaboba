@@ -2,8 +2,6 @@ FROM gradle:7.0.2-jdk11
 
 USER root
 
-USER gradle
-
 WORKDIR /home/gradle/project
 
 COPY . .
