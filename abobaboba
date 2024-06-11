@@ -3,8 +3,8 @@ FROM docker:dind
 USER root
 
 RUN dockerd &
-RUN apt-get update
-RUN apt-get install -y gradle
+RUN apk update
+RUN apk add --no-cache gradle
 
 USER gradle
 
