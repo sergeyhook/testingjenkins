@@ -21,7 +21,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker build -t HelloWorld .'
+                    sh 'sudo docker build -t HelloWorld .'
                 }
             }
         }
