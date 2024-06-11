@@ -7,6 +7,8 @@ pipeline {
     stages {
         stage('Build with Gradle') {
             steps {
+                sh 'ls -la ~/.gradle/native'
+                sh 'id'
                 sh 'gradle build'
             }
         }
