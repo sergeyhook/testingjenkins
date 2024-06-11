@@ -1,4 +1,4 @@
-FROM gradle:7.0.2-jdk11 as builder
+FROM gradle:7.0.2-jdk11
 
 USER root
 
@@ -7,9 +7,3 @@ USER gradle
 WORKDIR /home/gradle/project
 
 COPY . .
-
-FROM docker:dind
-
-COPY --from=builder /home/gradle/project /home/gradle/project
-
-WORKDIR /home/gradle/project

@@ -2,7 +2,7 @@ pipeline {
     agent { 
         dockerfile {
             filename 'abobaboba'
-            args '--privileged -v /root/.gradle:/root/.gradle'  
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /root/.gradle:/root/.gradle'    
         } 
     }
     stages {
