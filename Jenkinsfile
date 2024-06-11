@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
     stages {
         stage('Build with Gradle') {
             agent{ 
@@ -13,23 +13,22 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            agent{ 
+            agent any
+            /*agent{ 
                 dockerfile {
                     filename 'dockerbuilder'
                     args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
                 } 
-            }
+            }*/
             steps {
-                script {
-                    sh 'docker build -t HelloWorld .'
-                }
+                sh "docker build -t HelloWorld:${env.BUILD_ID} ."
             }
         }
 
         stage('Archive') {
             steps {
                 archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
-                sh 'docker save HelloWorld > HelloWorld.tar'
+                sh "docker save HelloWorld:${env.BUILD_ID} > HelloWorld.tar"
                 archiveArtifacts artifacts: 'HelloWorld.tar', fingerprint: true
             }
         }
