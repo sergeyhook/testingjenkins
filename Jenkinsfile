@@ -7,21 +7,30 @@ pipeline {
         DOCKER_TAG = 'latest'
         DOCKERFILE_BASE_PATH = 'gradlebuilder'
         DOCKERFILE_FINAL_PATH = 'Dockerfile'
+        KANIKO_IMAGE = 'gcr.io/kaniko-project/executor:latest'
     }
 
     stages {
-        stage('Build Base Docker Image and Gradle Application') {
+        stage('Build Base Docker Image') {
             steps {
                 script {
-                    // Use Docker to build the base Docker image
-                    def baseImageFingerprint = docker.build("${DOCKER_IMAGE_BASE}:${DOCKER_TAG}", "-f ${DOCKERFILE_BASE_PATH} .").id
-                    echo "Base image fingerprint: ${baseImageFingerprint}"
+                    // Use Kaniko to build the base Docker image
+                    sh "docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ${KANIKO_IMAGE} --dockerfile ${DOCKERFILE_BASE_PATH} --destination ${DOCKER_IMAGE_BASE}:${DOCKER_TAG}"
+                }
+            }
+        }
 
+        stage('Build Gradle Application') {
+            agent {
+                docker {
+                    image "${DOCKER_IMAGE_BASE}:${DOCKER_TAG}"
+                }
+            }
+            steps {
+                script {
                     // Use the base Docker image to build the Gradle application
-                    docker.image("${DOCKER_IMAGE_BASE}:${DOCKER_TAG}").inside {
-                        sh 'gradle build'
-                        sh 'cp build/libs/*.jar .'
-                    }
+                    sh 'gradle build'
+                    sh 'cp build/libs/*.jar .'
                 }
             }
         }
@@ -30,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Use Docker to build the final Docker image
-                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${env.BUILD_ID}", "-f ${DOCKERFILE_FINAL_PATH} .").id
+                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${DOCKER_TAG}", "-f ${DOCKERFILE_FINAL_PATH} .").id
                     echo "Final image fingerprint: ${finalImageFingerprint}"
                 }
             }
