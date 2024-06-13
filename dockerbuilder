@@ -1,8 +1,0 @@
-FROM docker:dind
-USER root
-RUN mkdir -p /.docker
-RUN mkdir -p /.docker/buildx
-RUN mkdir -p /.docker/buildx/instances
-RUN mkdir -p /.docker/buildx/defaults
-RUN mkdir -p /.docker/buildx/activity
-USER jenkins
