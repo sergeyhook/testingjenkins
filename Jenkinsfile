@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_BASE = 'gradlebuilder'
-        DOCKER_IMAGE_FINAL = 'final-image'
+        DOCKER_IMAGE_FINAL = 'testapp'
         DOCKER_TAG = 'latest'
         DOCKERFILE_BASE_PATH = 'gradlebuilder'
         DOCKERFILE_FINAL_PATH = 'Dockerfile'
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Use Kaniko to build the base Docker image
-                    sh "docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ${KANIKO_IMAGE} --dockerfile ${DOCKERFILE_BASE_PATH} --destination ${DOCKER_IMAGE_BASE}:${DOCKER_TAG}"
+                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ' + KANIKO_IMAGE + ' --dockerfile ' + DOCKERFILE_BASE_PATH + ' --destination ' + DOCKER_IMAGE_BASE + ':' + DOCKER_TAG
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     // Use Docker to build the final Docker image
-                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${DOCKER_TAG}", "-f ${DOCKERFILE_FINAL_PATH} .").id
+                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${env.BUILD_ID}", "-f ${DOCKERFILE_FINAL_PATH} .").id
                     echo "Final image fingerprint: ${finalImageFingerprint}"
                 }
             }
