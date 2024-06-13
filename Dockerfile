@@ -1,14 +1,14 @@
-# Use a base image with Java runtime
-FROM openjdk:17-jdk-alpine
+# Use AdoptOpenJDK OpenJDK 11 image as base
+FROM adoptopenjdk/openjdk11:alpine-jre
 
-# Set the working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy the build files
+# Copy the compiled application JAR file into the container at /app
 COPY build/libs/*.jar app.jar
 
-# Expose the application port
+# Expose port 8080 to the outside world
 EXPOSE 8080
 
-# Define the command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Command to run the application when the container starts
+CMD ["java", "-jar", "app.jar"]

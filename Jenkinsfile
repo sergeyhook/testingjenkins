@@ -1,32 +1,53 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'gcr.io/kaniko-project/executor:latest'
+        }
+    }
+
+    environment {
+        DOCKER_IMAGE_BASE = 'gradlebuilder' // Name of the base Docker image
+        DOCKER_IMAGE_FINAL = 'final-image' // Name of the final Docker image with Gradle application
+        DOCKER_TAG = 'latest'
+        DOCKERFILE_BASE_PATH = 'gradlebuilder' // Dockerfile for base image
+        DOCKERFILE_FINAL_PATH = 'Dockerfile' // Dockerfile for final image
+    }
+
     stages {
-        stage('Build with Gradle') {
-            agent{ 
-                dockerfile {
-                    filename 'gradlebuilder'  
-                } 
-            }
+        stage('Build Base Docker Image') {
             steps {
-                sh 'gradle build'
-                sh 'cp build/libs/*.jar .'
+                script {
+                    // Use Kaniko to build the base Docker image
+                    def baseImageFingerprint = docker.build("${DOCKER_IMAGE_BASE}:${DOCKER_TAG}", "-f ${DOCKERFILE_BASE_PATH} .").id
+                    echo "Base image fingerprint: ${baseImageFingerprint}"
+                }
             }
         }
 
-        stage('Build Docker Image') {
-            agent any
-            /*agent{ 
-                dockerfile {
-                    filename 'dockerbuilder'
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
-                } 
-            }*/
+        stage('Build Gradle Application') {
+            agent {
+                docker {
+                    image 'gradlebuilder:latest'
+                }
+            }
             steps {
-                sh "docker build -t helloworldq:${env.BUILD_ID} ."
-                
+                script {
+                    // Use the base Docker image to build the Gradle application
+                    sh 'gradle build'
+                    sh 'cp build/libs/*.jar .'
+                }
             }
         }
 
+        stage('Build Final Docker Image') {
+            steps {
+                script {
+                    // Use the Gradle image to build the final Docker image
+                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${DOCKER_TAG}", "--build-arg GRADLE_IMAGE=${DOCKER_IMAGE_GRADLE}:${DOCKER_TAG} -f ${DOCKERFILE_FINAL_PATH} .").id
+                    echo "Final image fingerprint: ${finalImageFingerprint}"
+                }
+            }
+        }
         stage('Archive') {
             steps {
                 archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true

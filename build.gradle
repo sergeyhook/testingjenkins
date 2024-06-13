@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'application' // Apply the application plugin
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3' // Replace with the desired version
+    // Other dependencies as needed
+}
+
+
+application {
+    mainClassName = 'com.example.Application' // Replace with your main class
+}
