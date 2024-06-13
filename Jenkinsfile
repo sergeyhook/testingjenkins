@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'gcr.io/kaniko-project/executor:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
