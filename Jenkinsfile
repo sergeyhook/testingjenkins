@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_BASE = 'gradlebuilder'
-        DOCKER_IMAGE_FINAL = 'testapp'
+        DOCKER_IMAGE_FINAL = 'final-image'
         DOCKER_TAG = 'latest'
         DOCKERFILE_BASE_PATH = 'gradlebuilder'
         DOCKERFILE_FINAL_PATH = 'Dockerfile'
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Use Kaniko to build the base Docker image
-                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ' + KANIKO_IMAGE + ' --dockerfile ' + DOCKERFILE_BASE_PATH + ' --destination ' + DOCKER_IMAGE_BASE + ':' + DOCKER_TAG
+                    sh "docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ${KANIKO_IMAGE} --dockerfile ${DOCKERFILE_BASE_PATH} --destination ${DOCKER_IMAGE_BASE}:${DOCKER_TAG} --no-push"
                 }
             }
         }
