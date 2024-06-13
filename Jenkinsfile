@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     // Use Kaniko to build the base Docker image
-                    sh "docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ${KANIKO_IMAGE} --dockerfile ${DOCKERFILE_BASE_PATH} --destination ${DOCKER_IMAGE_BASE}:${DOCKER_TAG} --no-push"
+                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace -e DOCKER_HOST -e DOCKER_CONFIG=/kaniko/.docker ' + KANIKO_IMAGE + ' --dockerfile ' + DOCKERFILE_BASE_PATH + ' --destination ' + DOCKER_IMAGE_BASE + ':' + DOCKER_TAG + ' --no-push'
                 }
             }
         }
