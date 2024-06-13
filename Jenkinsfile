@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Use Docker to build the final Docker image
-                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${DOCKER_TAG}", "--build-arg GRADLE_IMAGE=${DOCKER_IMAGE_BASE}:${DOCKER_TAG} -f ${DOCKERFILE_FINAL_PATH} .").id
+                    def finalImageFingerprint = docker.build("${DOCKER_IMAGE_FINAL}:${env.BUILD_ID}", "-f ${DOCKERFILE_FINAL_PATH} .").id
                     echo "Final image fingerprint: ${finalImageFingerprint}"
                 }
             }
